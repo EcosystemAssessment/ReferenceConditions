@@ -1,2 +1,3 @@
 # ReferenceConditions
-To evaluate the condition of each cell within an ecoregion we will first define baseline conditions for ecoregions by vegetation class (i.e. forest and rangeland). We will calculate baseline conditions by averaging cells where scPDSI is neutral (scPDSI 0.4 to -0.4) (Figure 4 and 5). Baseline conditions for all years (2002 to 2014) will be averaged for each ecoregion by vegetation class.
+## Objectives:
+1. Define baseline conditions for ecosystem classes (i.e. forests and rangelands) by ecoregion (ECO Map 2007). We will calculate baseline conditions by averaging cells where scPDSI is neutral (scPDSI 0.4 to -0.4). We will report baseline conditions for climate, NDVI, NPP, GPP, and LAI. 
