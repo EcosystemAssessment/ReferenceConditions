@@ -103,7 +103,14 @@ setwd('/Users/starrlab/git/ReferenceConditions/GIS')
 ## Import shapefiles:
 library(rgdal)
 
-er <- readOGR('/Users/starrlab/git/ReferenceConditions/GIS', "S_USA.ClimateSections")
-er.c <- readOGR('/Users/starrlab/git/ReferenceConditions/GIS', "S_USA.EcoMapProvinces")
+er.c <- readOGR('/Users/starrlab/git/ReferenceConditions/GIS', "S_USA.ClimateSections")
+er <- readOGR('/Users/starrlab/git/ReferenceConditions/GIS', "S_USA.EcoMapProvinces")
 
 par(mfrow=c(1,1))
+
+er.df <- as.data.frame(er)
+er.n <- er[, c(4:8)]
+
+pp.base.avg<- calc(pp.base, fun=mean,na.rm=T)
+
+er.n$ppt.avg <- extract(pp.base.avg, er.n)
