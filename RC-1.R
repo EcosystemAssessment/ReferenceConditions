@@ -1,14 +1,17 @@
 # Author: Sparkle L. Malone
 # Date: June 2015
-# Objective: Evaluate refernce conditions using scPDSI to identify sample cells.
+# Objective: Import datafiles of interest.
+
 rm(list=ls())
 # Upload Data Files into R from github:
 
 library(raster)
 library(rgdal)
+library(rgeos)
 
-yr.index <- seq(2000, 2013, 1)
+yr.index <- seq(2000, 2013, 1) # Creates an index for the raster stacks
 
+# Import raster files:
 pp <- stack('https://github.com/EcosystemAssessment/Data/raw/master/precipitation_00-13.tif')
 names(pp) <- yr.index
 
@@ -24,52 +27,24 @@ names(tmin) <- yr.index
 tmax <- stack('https://github.com/EcosystemAssessment/Data/raw/master/tmax_00-13.tif')
 names(tmax) <- yr.index
 
-rm(test3)
-
-
+rm(yr.index)
 
 # Import shapefiles:
-setwd( '~/git/Climate-Ecoregions/ShapeFiles')
+setwd('~/git/Climate-Ecoregions/Shapefiles')
 
-# Extract mean baseline conditions by ecoregion.
-setwd('~/git/ReferenceConditions/Shapefiles')
-
+region.rpa <- readOGR('.', 'RPA_region2')
 er.c <- readOGR('.', "S_USA.ClimateSections")
-er.p <-readOGR(".", 'S_USA.EcoMapProvinces')
+er.p <- readOGR('.', 'S_USA.EcoMapProvinces')
+usa <- readOGR('.', 'USA_BOUNDARY')
 
-# Summary
-par(mfrow=c(1,1))
+# Reproject shapefiles
+crs <- '+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0' # Projection
 
-er.df <- as.data.frame(er)
-er.n <- er[, c(4:8)]
+region.rpa  <- spTransform(region.rpa , crs)
+er.c <- spTransform(er.c, crs)
+er.p <- spTransform(er.p, crs)
+usa <- spTransform(usa, crs)
 
-pp.avg<- calc(pp, fun=mean,na.rm=T)
-
-er.n$ppt.avg <- extract(pp.avg, er.n)
-
-#__________-------------_____________-----------_______________-------------_______________
-
-#get number of cells
-rc.1 <- matrix(c(-Inf, Inf, 0), ncol=3, byrow=TRUE) # Matrix
-scpdsi.1 <- reclassify(scpdsi.yr[[2]], rc.1, right=T)
-hist(scpdsi.1)$count
-
-rm(rc.1, scpdsi.1)
-
-# Summarize Normals information: Percental of continential US that is within the normal range.
-Normals.summary <- data.frame(stringasfactors=F) # Creates a dataframe
-Normals.summary[1:15,1] <- seq(2000, 2014, 1) # Adds year to the dataframe.
-for (i in seq(1,15, 1)){
-  Normals.summary[i,2]  <- ((hist(scpdsi.yr.normals,layer=i, ylim=c(10000, 80000))$counts)/476109)*100 
-} # Calculates the percentage of cells in the normal range.
-
-library(rasterVis)
-levelplot(scpdsi.yr.normals) # plots of normal range
-
-
-
-# Baseline Condition Layers:
-pp.base <- mask(pp.usa , scpdsi.yr.normals)
-tmean.base <- mask(tmean.usa , scpdsi.yr.normals)
-tmin.base <- mask(tmin.usa , scpdsi.yr.normals)
-tmax.base <- mask(tmax.usa , scpdsi.yr.normals)
+# Crop shapefiles by RPA region 2 border:
+er.c <- crop( er.c, region.rpa)
+er.p <- crop( er.p, region.rpa)
