@@ -31,20 +31,7 @@ rm(yr.index)
 
 # Import shapefiles:
 setwd('~/git/Climate-Ecoregions/Shapefiles')
-
-region.rpa <- readOGR('.', 'RPA_region2')
-er.c <- readOGR('.', "S_USA.ClimateSections")
-er.p <- readOGR('.', 'S_USA.EcoMapProvinces')
-usa <- readOGR('.', 'USA_BOUNDARY')
-
-# Reproject shapefiles
-crs <- '+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0' # Projection
-
-region.rpa  <- spTransform(region.rpa , crs)
-er.c <- spTransform(er.c, crs)
-er.p <- spTransform(er.p, crs)
-usa <- spTransform(usa, crs)
-
+region.rpa <- readOGR('.', 'region')
+er.p <- readOGR('.', 'er_provinces')
 # Crop shapefiles by RPA region 2 border:
-er.c <- crop( er.c, region.rpa)
 er.p <- crop( er.p, region.rpa)
