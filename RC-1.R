@@ -1,5 +1,6 @@
 # Author: Sparkle L. Malone
 # Date: June 2015
+
 # Objective: Import datafiles of interest.
 
 rm(list=ls())
@@ -12,10 +13,10 @@ library(rgeos)
 yr.index <- seq(2000, 2013, 1) # Creates an index for the raster stacks
 
 # Import raster files:
-pp <- stack('https://github.com/EcosystemAssessment/Data/raw/master/precipitation_00-13.tif')
+pp <- raster('~/git/Data/precipitation_00-13.tif')
 names(pp) <- yr.index
 
-normals<- stack('https://github.com/EcosystemAssessment/Data/raw/master/scPDSI_00-13.tif')
+normals<- raster('https://github.com/EcosystemAssessment/Data/raw/master/scPDSI_00-13.tif')
 names(normals) <- yr.index
 
 tmean <- stack('https://github.com/EcosystemAssessment/Data/raw/master/tmean_00-13.tif')

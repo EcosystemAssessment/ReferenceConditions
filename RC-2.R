@@ -1,5 +1,6 @@
 # Author: Sparkle L. Malone
 # Date: June 2015
+
 # Objective: Summarize climate data by ecoregion province
 
 # Run RC-1 first to import data:
